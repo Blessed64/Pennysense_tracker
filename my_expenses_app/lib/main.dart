@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'expenses_page.dart';
-//                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-void main() {
-  runApp(const MyApp());
-}
+import 'screens/home_screen.dart';
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-  
+void main() => runApp(ExpenseApp());
+
+class ExpenseApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
+      theme: ThemeData.dark().copyWith(
+        scaffoldBackgroundColor: const Color(0xFF181624),
+        primaryColor: Colors.blue,
+      ),
       debugShowCheckedModeBanner: false,
-      home: ExpensesPage(),
+      home: HomeScreen(),
     );
   }
 }
