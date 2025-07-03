@@ -1,63 +1,61 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../models/expense.dart';
+import '../screens/expense_preview_screen.dart';
 
 class ExpenseTile extends StatelessWidget {
   final Expense expense;
-  final VoidCallback? onTap; // Allow tap navigation
 
-  const ExpenseTile({
-    Key? key,
-    required this.expense,
-    this.onTap,
-  }) : super(key: key);
+  const ExpenseTile({super.key, required this.expense});
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap, // Triggers navigation when tapped
-      child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 6),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        decoration: BoxDecoration(
-          color: const Color(0xFF2A293A),
-          borderRadius: BorderRadius.circular(12),
+    return Card(
+      color: const Color(0xFF2A293A),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      margin: const EdgeInsets.symmetric(vertical: 6),
+      child: ListTile(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => ExpensePreviewScreen(expense: expense),
+            ),
+          );
+        },
+        title: Center(
+          child: Text(
+            DateFormat('dd MMM yyyy').format(expense.date),
+            style: const TextStyle(color: Colors.white70, fontSize: 14),
+          ),
         ),
-        child: Row(
-          children: [
-            // 🗓️ Date
-            Text(
-              DateFormat('dd MMM').format(expense.date),
-              style: const TextStyle(
-                color: Colors.white70,
-                fontWeight: FontWeight.w500,
+        subtitle: Column(
+          children: expense.details.entries.map((entry) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 2),
+              child: Center(
+                child: RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: entry.key,
+                        style: const TextStyle(color: Colors.white, fontSize: 15),
+                      ),
+                      const TextSpan(text: '  '), // little space between name and amount
+                      TextSpan(
+                        text: '₦${entry.value.toStringAsFixed(0)}',
+                        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
+                      ),
+                    ],
+                  ),
+                ),
               ),
-            ),
-
-            const Spacer(),
-
-            // 📌 Static Category or Icon (optional)
-            const Icon(Icons.category_outlined, color: Colors.white38, size: 20),
-            const SizedBox(width: 6),
-            const Text(
-              'Expense',
-              style: TextStyle(color: Colors.white70),
-            ),
-
-            const Spacer(),
-
-            // 💰 Amount
-            Text(
-              '₦${expense.amount.toStringAsFixed(0)}',
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-
-            const SizedBox(width: 8),
-            const Icon(Icons.chevron_right, color: Colors.white24),
-          ],
+            );
+          }).toList(),
+        ),
+        trailing: Text(
+          '₦${expense.amount.toStringAsFixed(0)}',
+          style: const TextStyle(color: Colors.greenAccent, fontWeight: FontWeight.bold),
         ),
       ),
     );

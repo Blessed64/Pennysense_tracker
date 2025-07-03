@@ -1,14 +1,13 @@
-// TODO Implement this library.// models/expense.dart
 class Expense {
-  final DateTime date;
-  final String category;
   final double amount;
+  final DateTime date;
+  final Map<String, double> details;
   final String? note;
 
   Expense({
-    required this.date,
-    required this.category,
     required this.amount,
-    this.note, required List<Map<String, String>> items,
+    required this.date,
+    required this.details,
+    this.note,
   });
 }
